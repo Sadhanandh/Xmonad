@@ -1,0 +1,61 @@
+ #!/usr/bin/env bash
+
+#xcompmgr -fF -I-.002 -O-.003 -D1 &
+#sudo killall -9 esd
+#xrdb -merge .Xdefaults &
+
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+export GTK2_RC_FILES=/home/xadmin/.gtkrc-2.0-current
+trayer --edge top --align right --widthtype pixel --heighttype pixel --expand true --align right --SetDockType true --SetPartialStrut false --tint 0x000000 --transparent true --alpha 0 --margin 0 --height 8 --width 160 &
+
+# Activate primary screen
+xrandr --output LVDS-1 --auto --primary
+
+# If we find that a screen is connected via VGA, activate it and position it
+# to the left of the primary screen.
+xrandr | grep 'VGA-1 connected' | ifne xrandr --output VGA-1 --auto --left-of LVDS-1
+
+# If we find that a screen is connected via DVI, activate it and position it
+# to the left of the primary screen.
+xrandr | grep 'DP-1 connected' | ifne xrandr --output DP-1 --auto --left-of LVDS-1
+
+# Use dbus-launch if installed.
+if test x"$DBUS_SESSION_BUS_ADDRESS" = x""; then
+  if which dbus-launch >/dev/null 2>&1; then
+    eval `dbus-launch --sh-syntax --exit-with-session`
+    # some older versions of dbus don't export the var properly
+    export DBUS_SESSION_BUS_ADDRESS
+  else
+    echo "Could not find dbus-launch; Xmonad will not work properly" >&2
+    fi
+fi
+
+
+gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh
+xfce4-power-manager --no-daemon&
+xfce4-volumed &
+pulseaudio &
+#start-pulseaudio-x11 &
+nm-applet --sm-disable &
+indicator-keylock &
+#dropbox start &
+syndaemon -i 1 -t &
+artha &
+
+
+zim &
+#zim --gui
+#zim --plugin trayicon 
+#clipit &
+#clipit --no-icon &
+#parcellite &
+#synapse &
+guake &
+#indicator-remindor &
+xautolock -time 10 -locker slock &
+exec xmonad
+
+
