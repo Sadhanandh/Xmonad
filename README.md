@@ -1,13 +1,16 @@
 ##My Xmonad conf:
 
 modm -> Alt 
+
 mod4Mask -> Win Key 
 
 
 If you are using xephyr->
 
 Cntl(R) + Shift -> To UnCapture input. 
+
 Alt + Shift + Cntl(R) -> To Capture input 
+
 
 Add this to your bashrc: 
 `
@@ -23,10 +26,10 @@ alias syncx="${HOME}/.xmonad/syncx :0 :1"
 
 Or if otherwise then paste xmonad.desktop (after altering the username)
 in 
+
 "/usr/share/xsessions/"
 
 Or 
-
 `
 xinit -- :1
 `
