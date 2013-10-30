@@ -1,30 +1,28 @@
 ##My Xmonad conf:
 
 modm -> Alt 
-
 mod4Mask -> Win Key 
 
 
 If you are using xephyr->
 
 Cntl(R) + Shift -> To UnCapture input. 
-
 Alt + Shift + Cntl(R) -> To Capture input 
 
-Add this to your bashrc:
+Add this to your bashrc: 
 `
 alias xphr="Xephyr -ac -br -noreset -host-cursor -screen 1366x764 -fullscreen -dpi 100 :1 &sleep 1 ;DISPLAY=:1;feh --bg-fill ${HOME}/.xmonad/waterfall.jpg;xmonad &" 
 `
 
-Also This:
-
+Also This: 
 `
 alias syncx="${HOME}/.xmonad/syncx :0 :1"
 `
 
 (Use syncx to sync Xephyr clipboard)
 
-Or if otherwise then paste xmonad.desktop (after altering the username) in
+Or if otherwise then paste xmonad.desktop (after altering the username)
+in 
 "/usr/share/xsessions/"
 
 Or 
@@ -55,35 +53,35 @@ Win + space : change Layout
 
 Alt + Enter : Bring to Master
 
-Alt + h : Shrink Size
+Alt + h     : Shrink Size
 
-Alt + l : Expand Size
+Alt + l     : Expand Size
 
-Alt + a : Increase Size
+Alt + a     : Increase Size
 
-Alt + z : Pop Out (Tiled)
+Alt + z     : Pop Out (Tiled)
 
-Alt + b : Toggle Bar
+Alt + b     : Toggle Bar
 
-Alt + g : Toggle Border
+Alt + g     : Toggle Border
 
 Alt + Arrow : Focus
 
 
 
 
-Win + m : Minimize
+Win + m     : Minimize
 
-Win + M : UnMinimize
-
-
+Win + M     : UnMinimize
 
 
-Alt + p : Run
 
-Alt + Shift + Enter : Terminal
 
-Alt + Ctl + Arrow : Move Workspace
+Alt + p                   : Run
+
+Alt + Shift + Enter       : Terminal
+
+Alt + Ctl + Arrow         : Move Workspace
 
 Alt + Shift + Ctl + Arrow : Move Windows to different workspace
 
