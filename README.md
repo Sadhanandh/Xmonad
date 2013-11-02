@@ -41,7 +41,7 @@ Then execute
 
 ##Required:
 `
-sudo apt-get install xserver-xephyr xmonad suckless-tools xmobar trayer pcmanfm xfe lxappearance ttf-liberation  xfce4-mixer gmrun feh scrot nitrogen 
+sudo apt-get install xserver-xephyr xmonad suckless-tools xmobar trayer pcmanfm xfe lxappearance ttf-liberation  xfce4-mixer gmrun feh scrot nitrogen gmrun moreutils libnotify-bin notify-osd
 `
 
 ##Optional:
@@ -68,14 +68,31 @@ Alt + b     : Toggle Bar
 
 Alt + g     : Toggle Border
 
+Alt + v     : EasyMotion
+
+Alt + q     : Restart xmonad
+
+Alt + Q     : Log-out
+
 Alt + Arrow : Focus
 
 
+Win + Arrow : Move window
+
+Alt + j/k   : Move window
+
+Win + Shift Arrow : Swap window
+
+Alt +J/K    : Swap window
+
+Alt +,/.    : cluster master area
 
 
 Win + m     : Minimize
 
 Win + M     : UnMinimize
+
+Alt + x     : Mirror Layout
 
 
 
@@ -86,7 +103,17 @@ Alt + Shift + Enter       : Terminal
 
 Alt + Ctl + Arrow         : Move Workspace
 
-Alt + Shift + Ctl + Arrow : Move Windows to different workspace
+Alt + Shift + NUM         : Move Workspace
+
+Alt + Shift + Ctl + Arrow : Move Windows to a different workspace
+
+Alt + Shift + Ctl + NUM   : Move Window to a different Workspace
+
+Alt + Left Click          : Move Window
+
+Alt + Right Click         : Resize Window
+
+Alt + t                   : Sink Window Back
 
 
 For more shortcuts refer xmonad.hs
