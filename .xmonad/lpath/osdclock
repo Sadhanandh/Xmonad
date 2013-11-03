@@ -1,0 +1,2 @@
+#!/bin/bash
+osd_clock -f '-*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*' -s 0 -b  -r  -F '%I:%M  %p' &

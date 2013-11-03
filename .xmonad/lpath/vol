@@ -1,0 +1,2 @@
+#!/bin/bash
+amixer get Master | awk -F'[\\]\\[]' '{if ($6=="off"){print "MUTE";}else{print $2; }}'| tail -n 1

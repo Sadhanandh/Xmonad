@@ -33,6 +33,7 @@ import XMonad.Layout.PerWorkspace (onWorkspace, onWorkspaces)
 import XMonad.Layout.ResizeScreen
 import XMonad.Layout.Named
 import XMonad.Layout.DwmStyle
+import XMonad.Layout.Monitor
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -84,7 +85,24 @@ myModMask        = mod1Mask
  
 myNormalBorderColor  = "#dddddd"
 myFocusedBorderColor = "#ff0000"
+
+
+clock = monitor
+     { prop = ClassName "Dclock"
+     --, rect = Rectangle 0 0 40 20 -- rectangle 40x20 in upper left corner
+     , rect = Rectangle (1280-50) (800-20) 50 20
+      -- avoid flickering
+     , persistent = True
+      -- make the window transparent
+     , opacity = 0.5
+      -- hide on start
+     , visible = True
+      -- assign it a name to be able to toggle it independently of others
+     , name = "clock"
+     }
  
+
+
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
  
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
@@ -141,17 +159,19 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm              , xK_q     ), restart "xmonad" True)
   --, ((modm .|. controlMask , xK_t     ),spawn "gnome-terminal")
     , ((modm .|. controlMask , xK_t     ),spawn "terminator")
-    , ((modm .|. controlMask , xK_e     ),spawn "xfe")
+    , ((modm .|. controlMask , xK_e     ),spawn "thunar")
     , ((modm .|. controlMask , xK_l     ),spawn "gnome-screensaver-command --lock")
     , ((modm .|. controlMask , xK_q     ),spawn "indicator-remindor -q")
     , ((modm .|. controlMask , xK_m     ),spawn "indicator-remindor -m")
     , ((modm .|. controlMask , xK_z     ),spawn "zim")
     , ((modm .|. controlMask , xK_y     ),spawn "terminator")
-    , ((mod4Mask              , xK_f    ),spawn "thunar" )
+    , ((mod4Mask              , xK_f    ),spawn "xfe" )
     , ((mod4Mask              , xK_t    ),spawn "xfce4-terminal" )
+    , ((mod4Mask              , xK_v    ),spawn "ptoggle tint2" )
+    , ((mod4Mask              , xK_c    ),spawn "ptoggle dclock -geometry 53x22-8-50" )
     , ((0                     , xK_Print),spawn "scrot" )
   --, ((0                     , xK_Print),spawn "xfce4-screenshooter -f" ) --https://github.com/liuexp/arch-script/blob/master/.xmonad/easyxmotion.py
-    , ((modm                 , xK_v), spawn "~/.xmonad/easyxmotion.py --colour='#0fff00' --font='-adobe-helvetica-bold-r-normal-*-24-*-*-*-*-*-iso8859-1'")
+    , ((modm                 , xK_v), spawn "easyxmotion.py --colour='#0fff00' --font='-adobe-helvetica-bold-r-normal-*-24-*-*-*-*-*-iso8859-1'")
     -- Switching to layouts
     , ((mod4Mask .|. shiftMask              , xK_1           ), sendMessage $ JumpToLayout "Tiled"       )
     , ((mod4Mask .|. shiftMask              , xK_2           ), sendMessage $ JumpToLayout "ThreeCol"    )
@@ -188,11 +208,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((mod4Mask .|. shiftMask, xK_Down ), sendMessage $ Swap D)
 
 
- , ((0, xF86XK_AudioRaiseVolume), spawn "amixer -q set Master 10%+")
- , ((0, xF86XK_AudioLowerVolume),spawn "amixer -q set Master 10%-")
- , ((0, xF86XK_AudioMute), spawn "amixer -q set Master toggle")
+ , ((0, xF86XK_AudioRaiseVolume), sequence_ [spawn "amixer -q set Master 10%+",spawn "notify-send $(vol)" ])
+ , ((0, xF86XK_AudioLowerVolume), sequence_ [spawn "amixer -q set Master 10%-",spawn "notify-send $(vol)" ])
+ , ((0, xF86XK_AudioMute), sequence_ [spawn "amixer -q set Master toggle",spawn "notify-send $(vol)" ])
+ --, ((0, xF86XK_AudioRaiseVolume), spawn "amixer -q set Master 10%+")
+ --, ((0, xF86XK_AudioLowerVolume),spawn "amixer -q set Master 10%-")
+ --, ((0, xF86XK_AudioMute), spawn "amixer -q set Master toggle")
  --, ((0, xF86XK_Mail), spawn "urxvtc -e abook")
-
     --Cycle 
    , ((modm .|. controlMask,              xK_Right), nextWS)
    , ((modm .|. controlMask,              xK_Left ), prevWS)
@@ -337,9 +359,9 @@ myManageHooke = composeAll . concat $
      myFloatSimple = [""]
      myOtherFloats = ["Pavucontrol"]
      chatApps      = ["Pidgin"]  -- open on desktop 5
-     codeApps      = ["Eclipse"] -- open on desktop 4
-     webApps       = ["Firefox"] -- open on desktop 3
-     readApps      = ["Evince"]  -- open on desktop 2
+     codeApps      = ["Eclipse","Codeblocks"] -- open on desktop 4
+     webApps       = ["Firefox","Chromium-browser"] -- open on desktop 3
+     readApps      = ["Evince","Wine"]  -- open on desktop 2
      myIgnore      = ["stalonetray-one"]
 
 
@@ -354,6 +376,7 @@ myStartupHook  = do
 main  = do 
 
         xmproc  <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobarrc"
+        xmproc1 <- spawnPipe "/usr/bin/tint2 ~/.xmonad/tint2rc"
         --xmproc1 <-  spawnPipe "/usr/bin/xmobar ~/.xmobarrc1"
 
  
@@ -386,6 +409,7 @@ main  = do
         manageHook  =  
                      myManageHooke
                 <+>  manageHook defaultConfig 
+                <+>  manageMonitor clock
                 <+>  manageDocks ,
         logHook = dynamicLogWithPP xmobarPP
                     { ppOutput = hPutStrLn xmproc
