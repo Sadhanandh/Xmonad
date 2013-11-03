@@ -41,7 +41,7 @@ Then execute
 
 ##Required:
 `
-sudo apt-get install xserver-xephyr xmonad suckless-tools xmobar trayer pcmanfm xfe lxappearance ttf-liberation  xfce4-mixer gmrun feh scrot nitrogen gmrun moreutils libnotify-bin notify-osd
+sudo apt-get install xserver-xephyr xmonad suckless-tools xmobar trayer pcmanfm xfe lxappearance ttf-liberation  xfce4-mixer gmrun feh scrot nitrogen gmrun moreutils libnotify-bin notify-osd tint2 dclock
 `
 
 ##Optional:
@@ -67,6 +67,10 @@ Alt + z     : Pop Out (Tiled)
 Alt + b     : Toggle Bar
 
 Alt + g     : Toggle Border
+
+Win + v     : Toggle Tint2
+
+Win + c     : Toggle Dclock
 
 Alt + v     : EasyMotion
 
