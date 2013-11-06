@@ -4,13 +4,15 @@
 #sudo killall -9 esd
 #xrdb -merge .Xdefaults &
 
+export PATH="$HOME/usr/lpath/:$PATH"
+export PATH="$HOME/.xmonad/lpath:$PATH"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export LANGUAGE="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
 export GTK2_RC_FILES=/home/xadmin/.gtkrc-2.0-current
 trayer --edge top --align right --widthtype pixel --heighttype pixel --expand true --align right --SetDockType true --SetPartialStrut false --tint 0x000000 --transparent true --alpha 0 --margin 0 --height 8 --width 160 &
-
+#tint2 &
 # Activate primary screen
 xrandr --output LVDS-1 --auto --primary
 
@@ -36,26 +38,36 @@ fi
 
 gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh
 xfce4-power-manager --no-daemon&
-xfce4-volumed &
+#xfce4-volumed &
 pulseaudio &
+#pacmd "set-sink-volume 0 65536" &
 #start-pulseaudio-x11 &
 nm-applet --sm-disable &
 indicator-keylock &
 #dropbox start &
 syndaemon -i 1 -t &
 artha &
+if [ $(echo ${DISPLAY#":"}" > 0"|bc) -ne 0 ]
+    then 
+    syncxapp :0 $DISPLAY &
+fi
+#osdclock &
+#osd_clock -f '-*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*' -s 0 -b  -r  -F '%I:%M' &
+#Slow--
+#dclock -geometry 53x22-8-50 &
 
-
+#${HOME}/.xmonad/syncx :0 :2 &
 zim &
 #zim --gui
 #zim --plugin trayicon 
 #clipit &
 #clipit --no-icon &
-#parcellite &
-#synapse &
+parcellite &
+synapse -s &
 guake &
 #indicator-remindor &
 xautolock -time 10 -locker slock &
+cd ~
 exec xmonad
 
 

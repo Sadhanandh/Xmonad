@@ -45,6 +45,7 @@ import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
 
+import Control.Monad (liftM2)
 import XMonad.Actions.CycleWS
 import XMonad.Actions.NoBorders
 
@@ -171,7 +172,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((mod4Mask              , xK_c    ),spawn "ptoggle dclock -geometry 53x22-8-50" )
     , ((0                     , xK_Print),spawn "scrot" )
   --, ((0                     , xK_Print),spawn "xfce4-screenshooter -f" ) --https://github.com/liuexp/arch-script/blob/master/.xmonad/easyxmotion.py
-    , ((modm                 , xK_v), spawn "easyxmotion.py --colour='#0fff00' --font='-adobe-helvetica-bold-r-normal-*-24-*-*-*-*-*-iso8859-1'")
+    , ((modm                 , xK_v), spawn "easyxmotion --colour='#0fff00' --font='-adobe-helvetica-bold-r-normal-*-24-*-*-*-*-*-iso8859-1'")
     -- Switching to layouts
     , ((mod4Mask .|. shiftMask              , xK_1           ), sendMessage $ JumpToLayout "Tiled"       )
     , ((mod4Mask .|. shiftMask              , xK_2           ), sendMessage $ JumpToLayout "ThreeCol"    )
@@ -192,7 +193,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
 
 
-    , ((modm                   , xK_z), withFocused (sendMessage . maximizeRestore))
+    , ((modm                   , xK_s), withFocused (sendMessage . maximizeRestore))
     , ((mod4Mask               , xK_m), withFocused minimizeWindow)
     , ((mod4Mask  .|. shiftMask, xK_m), sendMessage RestoreNextMinimizedWin)
 
@@ -342,16 +343,24 @@ myManageHooke = composeAll . concat $
       , [ className   =? c --> floatFull         | c <- myFloatFull]
       , [ resource    =? r --> doFloat           | r <- myIgnore]
       , [ title       =? t --> doFloat           | t <- myOtherFloats]
-      , [ className   =? c --> doF (W.shift "2:read") | c <- readApps]
-      , [ className   =? c --> doF (W.shift "3:web")  | c <- webApps]
-      , [ className   =? c --> doF (W.shift "4:code") | c <- codeApps]
-   -- , [ className   =? c --> doF (W.shift "5:chat") | c <- chatApps]
+    --, [ className   =? c --> doF (W.shift "2:read") | c <- readApps]
+    --, [ resource    =? r --> doF (W.shift "2:read") | r <- readAppsr]
+    --, [ className   =? c --> doF (W.shift "3:web")  | c <- webApps]
+    --, [ className   =? c --> doF (W.shift "4:code") | c <- codeApps]
+    --, [ className   =? c --> doF (W.shift "5:chat") | c <- chatApps]
+      , [ className   =? c --> viewShift "2:read"| c <- readApps]
+      , [ resource    =? r --> viewShift "2:read"| r <- readAppsr]
+      , [ className   =? c --> viewShift "3:web" | c <- webApps]
+      , [ className   =? c --> viewShift "4:code"| c <- codeApps]
       ]
    where
 
      float = placeHook simpleSmart <+> doFloat <+> insertPosition Master Newer 
      floatCenter = doCenterFloat <+> insertPosition Master Newer
      floatFull = floatFull <+> insertPosition Master Newer
+
+--https://bbs.archlinux.org/viewtopic.php?id=66854
+     viewShift = doF . liftM2 (.) W.greedyView W.shift
  
      myFloats      = ["MPlayer","Indicator-remindor", "Zim","Pavucontrol","Guake.py","Wrapper","Artha","Xfce4-appfinder","xfce4-panel","Gimp","Orage"]
      myFloatCenter = [""]
@@ -359,9 +368,10 @@ myManageHooke = composeAll . concat $
      myFloatSimple = [""]
      myOtherFloats = ["Pavucontrol"]
      chatApps      = ["Pidgin"]  -- open on desktop 5
-     codeApps      = ["Eclipse","Codeblocks"] -- open on desktop 4
+     codeApps      = ["Eclipse","Codeblocks","ADT"] -- open on desktop 4
      webApps       = ["Firefox","Chromium-browser"] -- open on desktop 3
-     readApps      = ["Evince","Wine"]  -- open on desktop 2
+     readApps      = ["Evince"]  -- open on desktop 2
+     readAppsr     = ["Kindle.exe","Foxit Reader.exe"]  -- open on desktop 2
      myIgnore      = ["stalonetray-one"]
 
 
@@ -377,7 +387,6 @@ main  = do
 
         xmproc  <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobarrc"
         xmproc1 <- spawnPipe "/usr/bin/tint2 ~/.xmonad/tint2rc"
-        --xmproc1 <-  spawnPipe "/usr/bin/xmobar ~/.xmobarrc1"
 
  
 --

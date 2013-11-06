@@ -119,5 +119,7 @@ Alt + Right Click         : Resize Window
 
 Alt + t                   : Sink Window Back
 
+Alt + Shift + Space       : Default Layout
+
 
 For more shortcuts refer xmonad.hs
